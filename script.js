@@ -23,68 +23,80 @@ $(document).ready(function(){
 
 nCalc = {
     output: "",
-    problem: [],
-    probIndex: 0,
+    equation: [],
+    equaIndex: 0,
     curNum: "",
 
     allClear: function(){
         this.output = "";
-        this.problem = [];
+        this.equation = [];
         this.curNum  = "";
-        this.probIndex = 0;
+        this.equaIndex = 0;
+        this.display(this.output);
     },
 
-    
-
     addItem: function(val){
+
         this.output += val;
-        if(val == "="){
-            this.problem[this.probIndex] = this.curNum;
-            this.curNum = "";
-            var a = null;
-            var b = null;
-            var curValue;
-            for(var i = 0; i < this.problem.length; i++){
-                  switch(this.problem[i]){
-                      case undefined:
-                          break;
-                      case "+":
-                          b = this.problem[i + 1];
-                          curValue = addIt(a,b);
-                          break;
-                      default :
-                          a = this.problem[i];
-                  }
+
+        switch(val){
+            case "=":
+                this.equation[this.equaIndex] = this.curNum;
+                console.log(this.equation);
+                this.curNum = process(this.equation);
+                this.equation = [];
+                this.output  = this.curNum;
+                this.equaIndex = 0;
+                break;
+
+            case "-":
+            case "+":
+            case "/":
+            case "x":
+                this.equation[this.equaIndex] = this.curNum;
+                this.curNum = "";
+                this.equaIndex++;
+                this.equation[this.equaIndex] = val;
+                this.equaIndex++;
+                break;
+
+            default:
+                this.curNum += val;
+                break;
+        }
 
 
-
-            }
-            var stringValue = curValue.toString();
-            this.problem = [];
-            this.problem[0] = stringValue;
-            this.output = curValue;
-        }
-        else if(val == "+"){
-            this.problem[this.probIndex] = this.curNum;
-            this.curNum = "";
-            this.probIndex++;
-            this.problem[this.probIndex] = "+";
-            this.output = "";
-            this.probIndex++;
-        }
-        else{
-            this.curNum += val;
-        }
        this.display(this.output);
     },
 
-    display: function(){
-        $('#display').val(this.output);
-        console.log(this.problem);
+    display: function(show){
+        $('#display').val(show);
+
     }
 
 }
 
+function process(equation){
+    var output, operand, a, b;
+    a = equation[0];
+    for(var i = 0; i < equation.length; i++){
+        operand = equation[i + 1];
+        b = equation[i + 2];
+        switch (operand) {
+            case '+':
+                a = addIt(a,b);
+                break;
+            case '-':
+                a = subtractIt(a,b);
+                break;
+            default:
+               break;
+        }
+        i += 2;
+    }
+    output = a.toString();
+    return output;
+}
 
 function addIt(a,b){
     return parseInt(a) + parseInt(b);
@@ -92,7 +104,12 @@ function addIt(a,b){
 function subtractIt(a,b){
     return parseInt(a) - parseInt(b);
 }
-
+function subtractIt(a,b){
+    return parseInt(a) - parseInt(b);
+}
+function subtractIt(a,b){
+    return parseInt(a) - parseInt(b);
+}
 
 //var my_calculator = new calculator(calc);
 //
