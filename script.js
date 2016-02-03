@@ -63,9 +63,9 @@ nCalc = {
         this.output += val;
         //check which button is pressed
         switch(val){
-            //add last current number to equation and send to be processed
+            //add the last current number to equation array and send  it to be processed
             //reset the equation array and set current number to the result
-            //
+            //set flags numbers off and operands on
             case "=":
                 if(this.equation.length > 1 && this.curNum) {
                     this.equation[this.equaIndex] = this.curNum;
@@ -92,6 +92,10 @@ nCalc = {
                     this.firstOp = false;
                     this.numbersOn = true;
                 }
+                else{
+                    this.equation[this.equaIndex - 1] = val;
+                    this.display(this.equation.join(" ") + this.curNum);
+                }
                 break;
             case ".":
                 if(this.noDecimal && this.numbersOn){
@@ -103,7 +107,7 @@ nCalc = {
                 if(this.numbersOn) {
                     this.curNum += val;
                     this.firstOp = true;
-                    this.display(this.equation.join(" ") + this.curNum);
+
                 }
                 break;
         }
