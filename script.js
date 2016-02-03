@@ -30,6 +30,7 @@ nCalc = {
     equaIndex: 0,
     // holds next number to be placed inside array
     curNum: "",
+    noDecimal: true,
 
     //reset the current equation variables
     allClear: function(){
@@ -42,6 +43,7 @@ nCalc = {
     },
     clear: function(){
         this.curNum = "";
+        this.noDecimal = true;
         this.display(this.equation.join(" "));
     },
 
@@ -65,13 +67,19 @@ nCalc = {
             case "+":
             case "/":
             case "x":
+                this.noDecimal = true;
                 this.equation[this.equaIndex] = this.curNum;
                 this.curNum = "";
                 this.equaIndex++;
                 this.equation[this.equaIndex] = val;
                 this.equaIndex++;
                 break;
-
+            case ".":
+                if(this.noDecimal){
+                    this.curNum += val;
+                    this.noDecimal = false;
+                }
+                break;
             default:
                 this.curNum += val;
                 this.display(this.equation.join(" ") + this.curNum);
@@ -92,12 +100,12 @@ nCalc = {
 function process(equation){
     var output, operand, a, b;
     a = equation[0];
-    for(var i = 0; i < equation.length; i++){
+    for(var i = 0; i < equation.length - 1; i++){
         operand = equation[i + 1];
         b = equation[i + 2];
         a = checkOperand(operand, a, b);
         console.log(i);
-        i += 2;
+        i += 1;
     }
     output = a.toString();
     return output;
@@ -123,16 +131,16 @@ function checkOperand(operand, a, b){
 }
 
 function addIt(a,b){
-    return parseInt(a) + parseInt(b);
+    return parseFloat(a) + parseFloat(b);
 }
 function subtractIt(a,b){
-    return parseInt(a) - parseInt(b);
+    return parseFloat(a) - parseFloat(b);
 }
 function multiplyIt(a,b){
-    return parseInt(a) * parseInt(b);
+    return parseFloat(a) * parseFloat(b);
 }
 function divideIt(a,b){
-    return parseInt(a) / parseInt(b);
+    return parseFloat(a) / parseFloat(b);
 }
 
 //var my_calculator = new calculator(calc);
