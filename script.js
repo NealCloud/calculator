@@ -3,10 +3,10 @@
  */
 
 $(document).ready(function(){
-
+    //buttons activate calculator methods
     $('button').on('click', function () {
         var val = $(this).text();
-        console.log(val);
+        //console.log(val);
         switch (val) {
             case 'C':
                 nCalc.clear();
@@ -22,24 +22,37 @@ $(document).ready(function(){
 })
 
 nCalc = {
+    // holds output display
     output: "",
+    // holds longest equation array
     equation: [],
+    // the current equation array index
     equaIndex: 0,
+    // holds next number to be placed inside array
     curNum: "",
 
+    //reset the current equation variables
     allClear: function(){
         this.output = "";
         this.equation = [];
         this.curNum  = "";
         this.equaIndex = 0;
-        this.display(this.output);
+        //display output to the display
+        this.display(this.equation.join(" "));
+    },
+    clear: function(){
+        this.curNum = "";
+        this.display(this.equation.join(" "));
     },
 
     addItem: function(val){
-
+        //set display output to button pressed
         this.output += val;
-
+        //check which button is pressed
         switch(val){
+            //add last current number to equation and send to be processed
+            //reset the equation array and set current number to the result
+            //
             case "=":
                 this.equation[this.equaIndex] = this.curNum;
                 console.log(this.equation);
@@ -48,7 +61,6 @@ nCalc = {
                 this.output  = this.curNum;
                 this.equaIndex = 0;
                 break;
-
             case "-":
             case "+":
             case "/":
@@ -62,11 +74,12 @@ nCalc = {
 
             default:
                 this.curNum += val;
+                this.display(this.equation.join(" ") + this.curNum);
                 break;
         }
 
 
-       this.display(this.output);
+       this.display(this.equation.join(" ") + this.curNum);
     },
 
     display: function(show){
@@ -82,20 +95,31 @@ function process(equation){
     for(var i = 0; i < equation.length; i++){
         operand = equation[i + 1];
         b = equation[i + 2];
-        switch (operand) {
-            case '+':
-                a = addIt(a,b);
-                break;
-            case '-':
-                a = subtractIt(a,b);
-                break;
-            default:
-               break;
-        }
+        a = checkOperand(operand, a, b);
+        console.log(i);
         i += 2;
     }
     output = a.toString();
     return output;
+}
+function checkOperand(operand, a, b){
+    switch (operand) {
+        case '+':
+            return addIt(a,b);
+            break;
+        case '-':
+            return subtractIt(a,b);
+            break;
+        case 'x':
+            return multiplyIt(a,b);
+            break;
+        case '/':
+            return divideIt(a,b);
+            break;
+        default:
+            return "Error";
+            break;
+    }
 }
 
 function addIt(a,b){
@@ -104,11 +128,11 @@ function addIt(a,b){
 function subtractIt(a,b){
     return parseInt(a) - parseInt(b);
 }
-function subtractIt(a,b){
-    return parseInt(a) - parseInt(b);
+function multiplyIt(a,b){
+    return parseInt(a) * parseInt(b);
 }
-function subtractIt(a,b){
-    return parseInt(a) - parseInt(b);
+function divideIt(a,b){
+    return parseInt(a) / parseInt(b);
 }
 
 //var my_calculator = new calculator(calc);
