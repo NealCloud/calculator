@@ -31,6 +31,8 @@ nCalc = {
     // holds next number to be placed inside array
     curNum: "",
     noDecimal: true,
+    firstOp: true,
+    numbersOn: true,
 
     //reset the current equation variables
     allClear: function(){
@@ -62,27 +64,36 @@ nCalc = {
                 this.equation = [];
                 this.output  = this.curNum;
                 this.equaIndex = 0;
+                this.numbersOn = false;
+                this.firstOp = true;
                 break;
             case "-":
             case "+":
             case "/":
             case "x":
-                this.noDecimal = true;
-                this.equation[this.equaIndex] = this.curNum;
-                this.curNum = "";
-                this.equaIndex++;
-                this.equation[this.equaIndex] = val;
-                this.equaIndex++;
+                if(this.firstOp) {
+                    this.noDecimal = true;
+                    this.equation[this.equaIndex] = this.curNum;
+                    this.curNum = "";
+                    this.equaIndex++;
+                    this.equation[this.equaIndex] = val;
+                    this.equaIndex++;
+                    this.firstOp = false;
+                    this.numbersOn = true;
+                }
                 break;
             case ".":
-                if(this.noDecimal){
+                if(this.noDecimal && this.numbersOn){
                     this.curNum += val;
                     this.noDecimal = false;
                 }
                 break;
             default:
-                this.curNum += val;
-                this.display(this.equation.join(" ") + this.curNum);
+                if(this.numbersOn) {
+                    this.curNum += val;
+                    this.firstOp = true;
+                    this.display(this.equation.join(" ") + this.curNum);
+                }
                 break;
         }
 
