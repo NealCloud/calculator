@@ -30,8 +30,11 @@ nCalc = {
     equaIndex: 0,
     // holds next number to be placed inside array
     curNum: "",
+    //decimal flag
     noDecimal: true,
-    firstOp: true,
+    //multiple operands flag
+    firstOp: false,
+    //numbers allowed flag
     numbersOn: true,
 
     //reset the current equation variables
@@ -40,11 +43,17 @@ nCalc = {
         this.equation = [];
         this.curNum  = "";
         this.equaIndex = 0;
+
+        this.firstOp = false;
+        this.numbersOn = true;
+        this.noDecimal = true;
         //display output to the display
         this.display(this.equation.join(" "));
     },
     clear: function(){
         this.curNum = "";
+        this.firstOp = false;
+        this.numbersOn = true;
         this.noDecimal = true;
         this.display(this.equation.join(" "));
     },
@@ -58,14 +67,16 @@ nCalc = {
             //reset the equation array and set current number to the result
             //
             case "=":
-                this.equation[this.equaIndex] = this.curNum;
-                console.log(this.equation);
-                this.curNum = process(this.equation);
-                this.equation = [];
-                this.output  = this.curNum;
-                this.equaIndex = 0;
-                this.numbersOn = false;
-                this.firstOp = true;
+                if(this.equation.length > 1 && this.curNum) {
+                    this.equation[this.equaIndex] = this.curNum;
+                    console.log(this.equation);
+                    this.curNum = process(this.equation);
+                    this.equation = [];
+                    this.output = this.curNum;
+                    this.equaIndex = 0;
+                    this.numbersOn = false;
+                    this.firstOp = true;
+                }
                 break;
             case "-":
             case "+":
