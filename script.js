@@ -72,6 +72,7 @@ nCalc = {
             console.log("Error Reset");
             return
         }
+        console.log(this.equation[this.equation[this.equation.length- 1]]);
 
         //check which button is pressed
         switch(val){
@@ -79,32 +80,31 @@ nCalc = {
             //reset the equation array and set current number to the result
             //set flags numbers off and operands on
             case "=":
-                if(this.equation.length > 1 && this.curNum) {
+                 if(this.equation.length > 0 && !this.curNum) {
+                     console.log("operand only detected" , this.equation, this.curNum);
+                    this.equation.push(this.equation[0]);
+
+                    this.curNum = process(this.equation);
+                    this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    this.equation = [];
+                    this.equaIndex = 0;
+                    this.numbersOn = false;
+                    this.firstOp = true;
+                }
+                // if equation is full and a new number is entered
+                else if(this.equation.length > 1 && this.curNum) {
                     this.equation[this.equaIndex] = this.curNum;
                     console.log(this.equation);
                     this.curNum = process(this.equation);
                     this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
                     this.equation = [];
 
-
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
                 }
-                else if(this.equation.length > 0) {
 
-                    this.equation = [this.lastCalc[0], this.equation[1],this.lastCalc[0]] ;
-                    console.log("operand only detected" , this.equation);
-                    this.curNum = process(this.equation);
-                    this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
-                    this.equation = [];
-
-
-                    this.equaIndex = 0;
-                    this.numbersOn = false;
-                    this.firstOp = true;
-                }
-                //check if last calculation is true;
+                //if no new numbers or operands hit check for the last calculation and apply it again;
                 else if(this.lastCalc){
                     console.log("calcing using last calc: " , this.lastCalc);
 
