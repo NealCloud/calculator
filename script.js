@@ -40,6 +40,8 @@ nCalc = {
     numbersOn: true,
     //Error Check
     error: false,
+    //negative number check
+    negative: false,
 
     //reset the current equation variables
     allClear: function(){
@@ -119,6 +121,20 @@ nCalc = {
                 else{
                     this.equation[this.equaIndex - 1] = val;
                     this.display(this.equation.join(" ") + this.curNum);
+                }
+                break;
+            case "- / +":
+                if(this.numbersOn && !this.negative) {
+                    this.curNum = "-" + this.curNum;
+                    this.negative = true;
+                }
+                else if(this.numbersOn && this.negative){
+                    var newCur = "";
+                    this.negative = false;
+                    for(var i = 1; i < this.curNum.length; i++){
+                        newCur += this.curNum[i]
+                    }
+                    this.curNum = newCur;
                 }
                 break;
             case ".":
