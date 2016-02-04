@@ -30,12 +30,16 @@ nCalc = {
     equaIndex: 0,
     // holds next number to be placed inside array
     curNum: "",
+    //equation store
+    result : null,
     //decimal flag
     noDecimal: true,
     //multiple operands flag
     firstOp: false,
     //numbers allowed flag
     numbersOn: true,
+    //Error Check
+    error: false,
 
     //reset the current equation variables
     allClear: function(){
@@ -43,13 +47,13 @@ nCalc = {
         this.equation = [];
         this.curNum  = "";
         this.equaIndex = 0;
-
         this.firstOp = false;
         this.numbersOn = true;
         this.noDecimal = true;
         //display output to the display
         this.display(this.equation.join(" "));
     },
+    //reset only the current number
     clear: function(){
         this.curNum = "";
         this.firstOp = false;
@@ -59,6 +63,9 @@ nCalc = {
     },
 
     addItem: function(val){
+        if(this.curNum == "Error"){
+            console.log("Error Reset");
+        }
         //set display output to button pressed
         this.output += val;
         //check which button is pressed
@@ -71,11 +78,27 @@ nCalc = {
                     this.equation[this.equaIndex] = this.curNum;
                     console.log(this.equation);
                     this.curNum = process(this.equation);
+                    this.result = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
                     this.equation = [];
                     this.output = this.curNum;
+
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
+                }
+                else if(this.result){
+                    console.log(this.result);
+
+                    this.curNum = process(this.result);
+                    console.log(this.curNum);
+                    this.result[0] = this.curNum;
+                    this.equation = [];
+                    this.output = this.curNum;
+
+                    this.equaIndex = 0;
+                    this.numbersOn = false;
+                    this.firstOp = true;
+                    console.log(this.result);
                 }
                 break;
             case "-":
@@ -107,18 +130,15 @@ nCalc = {
                 if(this.numbersOn) {
                     this.curNum += val;
                     this.firstOp = true;
-
                 }
                 break;
         }
-
 
        this.display(this.equation.join(" ") + this.curNum);
     },
 
     display: function(show){
         $('#display').val(show);
-
     }
 
 }
@@ -130,7 +150,6 @@ function process(equation){
         operand = equation[i + 1];
         b = equation[i + 2];
         a = checkOperand(operand, a, b);
-        console.log(i);
         i += 1;
     }
     output = a.toString();
@@ -166,6 +185,7 @@ function multiplyIt(a,b){
     return parseFloat(a) * parseFloat(b);
 }
 function divideIt(a,b){
+    if(b == 0) return "Error";
     return parseFloat(a) / parseFloat(b);
 }
 
