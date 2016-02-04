@@ -103,6 +103,9 @@ nCalc = {
                     this.firstOp = true;
                     console.log(this.lastCalc);
                 }
+                else if(this.equation.length > 1 && !this.curNum){
+                    console.log("plus detected");
+            }
                 break;
             case "-":
             case "+":
