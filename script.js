@@ -31,7 +31,7 @@ nCalc = {
     // holds next number to be placed inside array
     curNum: "",
     //equation store
-    result : null,
+    lastCalc : null,
     //decimal flag
     noDecimal: true,
     //multiple operands flag
@@ -47,6 +47,7 @@ nCalc = {
         this.equation = [];
         this.curNum  = "";
         this.equaIndex = 0;
+        this.lastCalc = null;
         this.firstOp = false;
         this.numbersOn = true;
         this.noDecimal = true;
@@ -78,7 +79,7 @@ nCalc = {
                     this.equation[this.equaIndex] = this.curNum;
                     console.log(this.equation);
                     this.curNum = process(this.equation);
-                    this.result = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
                     this.equation = [];
                     this.output = this.curNum;
 
@@ -86,19 +87,19 @@ nCalc = {
                     this.numbersOn = false;
                     this.firstOp = true;
                 }
-                else if(this.result){
-                    console.log(this.result);
+                else if(this.lastCalc){
+                    console.log(this.lastCalc);
 
-                    this.curNum = process(this.result);
+                    this.curNum = process(this.lastCalc);
                     console.log(this.curNum);
-                    this.result[0] = this.curNum;
+                    this.lastCalc[0] = this.curNum;
                     this.equation = [];
                     this.output = this.curNum;
 
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
-                    console.log(this.result);
+                    console.log(this.lastCalc);
                 }
                 break;
             case "-":
@@ -123,11 +124,13 @@ nCalc = {
             case ".":
                 if(this.noDecimal && this.numbersOn){
                     this.curNum += val;
+                    this.lastCalc = null;
                     this.noDecimal = false;
                 }
                 break;
             default:
                 if(this.numbersOn) {
+                    this.lastCalc = null;
                     this.curNum += val;
                     this.firstOp = true;
                 }
