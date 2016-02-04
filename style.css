@@ -61,7 +61,7 @@ body{
 .key:after {
     content: "";
     background: #6C8F92;
-    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    background: linear-gradient(red, orange, yellow, green, blue, indigo, violet);
     display: block;
     position: absolute;
     padding-top: 300%;
