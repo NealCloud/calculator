@@ -32,8 +32,6 @@ nCalc = {
     storOp: null,
     //stores last calculation
     lastCalc : null,
-    //last display variable
-    lastDisplay: 0,
     //decimal flag
     noDecimal: true,
     //multiple operator flag
@@ -54,7 +52,7 @@ nCalc = {
         this.noDecimal = true;
         this.negative = false;
         //display output to the display
-        this.lastDisplay = this.display(this.equation.join(" "));
+        this.display(this.equation.join(" "));
     },
     //reset only the current number
     clear: function(){
@@ -72,7 +70,6 @@ nCalc = {
             console.log("Error Reset");
             return
         }
-        console.log(this.equation[this.equation[this.equation.length- 1]]);
 
         //check which buttons are pressed and add them to equation array and send to process function when equals is hit
         switch(val){
@@ -90,7 +87,6 @@ nCalc = {
                     }
                     //else equation must be similar to ["2", "+", "1", "+"]
                      else{
-                        console.log(this.equation);
                         // process the equation without the last operator and store it ["2", "+", "1"]    pop ["+"]
                         this.storeOp = this.equation.pop();
                         this.curNum = process(this.equation);
@@ -219,7 +215,6 @@ function process(equation){
     }
     // return result as a string;
     output = a.toString();
-    console.log("returning " + output);
     return output;
 }
 //
