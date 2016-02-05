@@ -56,12 +56,14 @@ nCalc = {
         this.firstOp = false;
         this.numbersOn = true;
         this.noDecimal = true;
+        this.negative = false;
         //display output to the display
         this.lastDisplay = this.display(this.equation.join(" "));
     },
     //reset only the current number
     clear: function(){
         this.curNum = "";
+        this.negative = false;
         this.firstOp = false;
         this.numbersOn = true;
         this.noDecimal = true;
