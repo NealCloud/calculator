@@ -66,9 +66,10 @@ nCalc = {
 
     addItem: function(val){
         //check for errors
-        if(this.curNum == "Error"){
+        if(this.curNum == "Error" || this.curNum == "Ready"){
             console.log("Error Reset");
-            return
+            this.allClear();
+            return;
         }
 
         //check which buttons are pressed and add them to equation array and send to process function when equals is hit
@@ -115,6 +116,9 @@ nCalc = {
                     // set first index of last calc to total  ["16", "+", "6"]
                     this.lastCalc[0] = this.curNum;
                     this.resetEquation();
+                }
+                else{
+                    this.curNum = "Ready";
                 }
 
                 break;
@@ -194,33 +198,45 @@ nCalc = {
     }
 }
 
-//TODO: use an indexOf() instead of loop
 //loop through the equation array and send to the appropriate calculation
 //only accepts equations with number operator number format
 //["2",  "+",  "1",  "x",    "5"]
 //["a", "op", "b-a", "op", "b-a"]
-function process(equation){
-    var output, operator, a, b;
-    //set a to starting number
-    a = equation[0];
-    //go through array using a double iteration to skip over operators ;
-    for(var i = 0; i < equation.length - 1; i+= 2){
-        //the operator must come after the first number
-        operator = equation[i + 1];
-        //set b to 3rd array index (should be a number)
-        b = equation[i + 2];
-        //set a to the value of the calculation between (a operator b)
-        a = checkOperator(operator, a, b);
-    //    keep repeating using a to hold the total calculations in the order or the array
-    }
-    // return result as a string;
-    output = a.toString();
-    return output;
-}
-//
 //function process(equation){
-//    checkOperator(equation[0],equation[1],equation[2]);
+//    var output, operator, a, b;
+//    //set a to starting number
+//    a = equation[0];
+//    //go through array using a double iteration to skip over operators ;
+//    for(var i = 0; i < equation.length - 1; i+= 2){
+//        //the operator must come after the first number
+//        operator = equation[i + 1];
+//        //set b to 3rd array index (should be a number)
+//        b = equation[i + 2];
+//        //set a to the value of the calculation between (a operator b)
+//        a = checkOperator(operator, a, b);
+//    //    keep repeating using a to hold the total calculations in the order or the array
+//    }
+//    // return result as a string;
+//    output = a.toString();
+//    return output;
 //}
+//replaced
+// process equation with index of
+function process(equation){
+    var a = equation[0];
+    var b, operator;
+    //search through equation array and match with indexOf
+    for(var i = 0; i < equation.length; i ++){
+        var index = "x+/-".indexOf(equation[i]);
+        //match found send the operator with before/after items to be calculated
+        if(index >= 0){
+            b = equation[i + 1];
+            operator  = equation[i];
+            a = checkOperator(operator, a, b);
+        }
+    }
+    return a.toString();
+}
 //checks Operator and applies  and returns correct operation
 function checkOperator(operator, a, b){
     switch (operator) {
