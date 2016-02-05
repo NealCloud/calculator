@@ -98,14 +98,10 @@ nCalc = {
                         this.equation[0] = this.curNum;
                         this.equation[2] = this.curNum;
                         this.curNum = process(this.equation);
-                        // set lastCalc to ["3", "+" , "3"]
+                        // set lastCalc to ["6", "+" , "3"]
                         this.lastCalc = [this.curNum, this.storeOp, this.equation[this.equation.length - 1]];
                     }
-                    //reset equation and it's index and turn numbers off and operators on
-                    this.equation = [];
-                    this.equaIndex = 0;
-                    this.numbersOn = false;
-                    this.firstOp = true;
+                    this.resetEquation();
                 }
                 // if equation ends with a number ["4","+","6"]  (really its ["4","+"] and curNum = "6")
                 else if(len > 1 && this.curNum) {
@@ -114,11 +110,7 @@ nCalc = {
                     this.curNum = process(this.equation);
                     //set the last Calc to ["10" , "+", "6"] so it continues to add 6 until changed
                     this.lastCalc = [this.curNum, this.equation[len - 1],this.equation[len]];
-                    //reset equation and turn numbers off / operators on
-                    this.equation = [];
-                    this.equaIndex = 0;
-                    this.numbersOn = false;
-                    this.firstOp = true;
+                    this.resetEquation();
                 }
 
                 //No equation found, but lastCalc exists so process the lastCalc instead  ["10", "+", "6"]
@@ -126,12 +118,9 @@ nCalc = {
                     this.curNum = process(this.lastCalc);
                     // set first index of last calc to total  ["16", "+", "6"]
                     this.lastCalc[0] = this.curNum;
-                    //reset equation and turn numbers off / operators on
-                    this.equation = [];
-                    this.equaIndex = 0;
-                    this.numbersOn = false;
-                    this.firstOp = true;
+                    this.resetEquation();
                 }
+
                 break;
             case "-":
             case "+":
@@ -199,6 +188,13 @@ nCalc = {
     display: function(show){
         $('#display').val(show);
         return show;
+    },
+    //resets equation/index and locks numbers and allows operators
+    resetEquation: function(){
+        this.equation = [];
+        this.equaIndex = 0;
+        this.numbersOn = false;
+        this.firstOp = true;
     }
 }
 
