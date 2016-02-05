@@ -30,7 +30,9 @@ nCalc = {
     equaIndex: 0,
     // holds next number to be placed inside array
     curNum: "",
-    //equation store
+    //stores extra operator
+    storOp: null,
+    //euqation stores
     lastCalc : null,
     //lastStore
     lastDisplay: 0,
@@ -80,23 +82,37 @@ nCalc = {
             //reset the equation array and set current number to the result
             //set flags numbers off and operands on
             case "=":
-                 if(this.equation.length > 0 && !this.curNum) {
-                     console.log("operand only detected" , this.equation, this.curNum);
-                    this.equation.push(this.equation[0]);
+                var len = this.equation.length;
+                //equation with more than 2 items and operand is the end  "2 + 1 + "
+                if(len > 1 && !this.curNum) {
+                    //calculate the equation using the first number twice
+                    if(len == 2){
+                        this.equation.push(this.equation[0]);
+                        this.curNum = process(this.equation);
+                        this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    }
+                    //pass in the equation without the last operand and store it to pass in next calculation
+                     else{
+                        console.log(this.equation);
+                        this.storeOp = this.equation.pop();
+                        this.curNum = process(this.equation);
+                        this.equation[0] = this.curNum;
+                        this.equation[2] = this.curNum;
+                        this.curNum = process(this.equation);
+                        this.lastCalc = [this.curNum, this.storeOp, this.equation[this.equation.length - 1]];
+                    }
 
-                    this.curNum = process(this.equation);
-                    this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
                     this.equation = [];
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
                 }
-                // if equation is full and a new number is entered
-                else if(this.equation.length > 1 && this.curNum) {
+                // if equation is a regular equation "4+6"
+                else if(len > 1 && this.curNum) {
                     this.equation[this.equaIndex] = this.curNum;
-                    console.log(this.equation);
+                    console.log("equation regular is :" + this.equation);
                     this.curNum = process(this.equation);
-                    this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    this.lastCalc = [this.curNum, this.equation[len - 1],this.equation[len]];
                     this.equation = [];
 
                     this.equaIndex = 0;
@@ -106,7 +122,7 @@ nCalc = {
 
                 //if no new numbers or operands hit check for the last calculation and apply it again;
                 else if(this.lastCalc){
-                    console.log("calcing using last calc: " , this.lastCalc);
+                    console.log("equation using last calc: " , this.lastCalc);
 
                     this.curNum = process(this.lastCalc);
                     console.log(this.curNum);
@@ -183,8 +199,8 @@ nCalc = {
         $('#display').val(show);
         return show;
     }
-
 }
+
 //TODO: use an indexOf() instead of loop
 //loop through equation and send to appropriate calculation
 //only accepts equations with number operator number format ["2","+","1", "x", "5"]
@@ -204,8 +220,14 @@ function process(equation){
     }
     // return result as a string;
     output = a.toString();
+    console.log("returning " + output);
     return output;
 }
+//
+//function process(equation){
+//    checkOperand(equation[0],equation[1],equation[2]);
+//}
+
 function checkOperand(operand, a, b){
     switch (operand) {
         case '+':
