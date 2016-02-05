@@ -22,8 +22,6 @@ $(document).ready(function(){
 })
 
 nCalc = {
-    // holds output display
-    output: "",
     // holds longest equation array
     equation: [],
     // the current equation array index
@@ -32,19 +30,17 @@ nCalc = {
     curNum: "",
     //stores extra operator
     storOp: null,
-    //euqation stores
+    //stores last calculation
     lastCalc : null,
-    //lastStore
+    //last display variable
     lastDisplay: 0,
     //decimal flag
     noDecimal: true,
-    //multiple operands flag
+    //multiple operator flag
     firstOp: false,
     //numbers allowed flag
     numbersOn: true,
-    //Error Check
-    error: false,
-    //negative number check
+    //negative number flag
     negative: false,
 
     //reset the current equation variables
@@ -78,98 +74,98 @@ nCalc = {
         }
         console.log(this.equation[this.equation[this.equation.length- 1]]);
 
-        //check which button is pressed
+        //check which buttons are pressed and add them to equation array and send to process function when equals is hit
         switch(val){
-            //add the last current number to equation array and send  it to be processed
-            //reset the equation array and set current number to the result
-            //set flags numbers off and operands on
             case "=":
+                //get length of equation array
                 var len = this.equation.length;
-                //equation with more than 2 items and operand is the end  "2 + 1 + "
+                //check if equation array uses an operator at the end  ex ["2", "+", "1", "+"]
                 if(len > 1 && !this.curNum) {
-                    //calculate the equation using the first number twice
+                    //check if equation length is only 2 ex ["2", "+"]
+                    //push the first equation number to the back ["2", "+", "2"] and process the equation
                     if(len == 2){
                         this.equation.push(this.equation[0]);
                         this.curNum = process(this.equation);
                         this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
                     }
-                    //pass in the equation without the last operand and store it to pass in next calculation
+                    //else equation must be similar to ["2", "+", "1", "+"]
                      else{
                         console.log(this.equation);
+                        // process the equation without the last operator and store it ["2", "+", "1"]    pop ["+"]
                         this.storeOp = this.equation.pop();
                         this.curNum = process(this.equation);
+                        // create a new equation with result of previous calculation  ["3" , "+", "3"]
                         this.equation[0] = this.curNum;
                         this.equation[2] = this.curNum;
                         this.curNum = process(this.equation);
+                        // set lastCalc to ["3", "+" , "3"]
                         this.lastCalc = [this.curNum, this.storeOp, this.equation[this.equation.length - 1]];
                     }
-
+                    //reset equation and it's index and turn numbers off and operators on
                     this.equation = [];
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
                 }
-                // if equation is a regular equation "4+6"
+                // if equation ends with a number ["4","+","6"]  (really its ["4","+"] and curNum = "6")
                 else if(len > 1 && this.curNum) {
+                    //push the curNum to equation array to complete it and send it to be processed
                     this.equation[this.equaIndex] = this.curNum;
-                    console.log("equation regular is :" + this.equation);
                     this.curNum = process(this.equation);
+                    //set the last Calc to ["10" , "+", "6"] so it continues to add 6 until changed
                     this.lastCalc = [this.curNum, this.equation[len - 1],this.equation[len]];
+                    //reset equation and turn numbers off / operators on
                     this.equation = [];
-
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
                 }
 
-                //if no new numbers or operands hit check for the last calculation and apply it again;
+                //No equation found, but lastCalc exists so process the lastCalc instead  ["10", "+", "6"]
                 else if(this.lastCalc){
-                    console.log("equation using last calc: " , this.lastCalc);
-
                     this.curNum = process(this.lastCalc);
-                    console.log(this.curNum);
+                    // set first index of last calc to total  ["16", "+", "6"]
                     this.lastCalc[0] = this.curNum;
+                    //reset equation and turn numbers off / operators on
                     this.equation = [];
-
                     this.equaIndex = 0;
                     this.numbersOn = false;
                     this.firstOp = true;
-                    console.log("new last calc: " , this.lastCalc);
-                    console.log("new equation " , this.equation);
                 }
-
                 break;
             case "-":
             case "+":
             case "/":
             case "x":
+                //check if operators are allowed
                 if(this.firstOp) {
-                    //lock Operands and unlock numbers and decimals
+                    //lock out operators and unlock numbers and decimals
                     this.firstOp = false;
                     this.numbersOn = true;
                     this.noDecimal = true;
-                    //push current number to the equation array and reset current number
+                    //push curNum to the equation array using equaIndex and reset current number
                     this.equation[this.equaIndex] = this.curNum;
                     this.curNum = "";
-                    //increase equation index and push operand to equation array and increase index again
+                    //increase equaIndex and push the operator to the equation array and increase index again
                     this.equaIndex++;
                     this.equation[this.equaIndex] = val;
                     this.equaIndex++;
                 }
                 else{
-                    //if operands locked update the last index in equation array to be the new operand selected and update display
+                    //if operands is locked change the last operand in the equation array with new one
                     this.equation[this.equaIndex - 1] = val;
-                    this.lastDisplay = this.display(this.equation.join(" ") + this.curNum);
+                    //update selection
+                    this.display(this.equation.join(" ") + this.curNum);
                 }
                 break;
             case "- / +":
-                //toggle a plus or minus sign  to current Number
-                //check if negative and numbers allowed then add a minus to current number
+                //toggle a plus or minus sign to current Number
+                //check if its negative and numbers allowed then add a minus to current number
                 if(this.numbersOn && !this.negative) {
                     this.curNum = "-" + this.curNum;
                     this.negative = true;
                 }
-                //other wise splice off minus sign
+                //other wise slice off minus sign from current number
                 else if(this.numbersOn && this.negative){
                     var newCur = this.curNum.slice(1);
                     this.negative = false;
@@ -177,18 +173,21 @@ nCalc = {
                 }
                 break;
             case ".":
-                //check for decimal and number lock and concat to current number reset last Calc and disable decimals
+                //check for decimals and number lock and concat to current number
                 if(this.noDecimal && this.numbersOn){
                     this.curNum += val;
+                    //reset lastCalc and disable decimals
                     this.lastCalc = null;
                     this.noDecimal = false;
                 }
                 break;
             default:
-                //check for number lock and reset lastCalc and concat number to current number and allow Operands
+                //checks for number lock
                 if(this.numbersOn) {
-                    this.lastCalc = null;
+                    //concat number to current number
                     this.curNum += val;
+                    //reset lastCalc and allow operators
+                    this.lastCalc = null;
                     this.firstOp = true;
                 }
                 break;
@@ -196,7 +195,7 @@ nCalc = {
        // update display to show current button pressed
        this.display(this.equation.join(" ") + " " + this.curNum);
     },
-    //return input and update display
+    //returns input and updates display
     display: function(show){
         $('#display').val(show);
         return show;
@@ -204,21 +203,23 @@ nCalc = {
 }
 
 //TODO: use an indexOf() instead of loop
-//loop through equation and send to appropriate calculation
-//only accepts equations with number operator number format ["2","+","1", "x", "5"]
+//loop through the equation array and send to the appropriate calculation
+//only accepts equations with number operator number format
+//["2",  "+",  "1",  "x",    "5"]
+//["a", "op", "b-a", "op", "b-a"]
 function process(equation){
-    var output, operand, a, b;
+    var output, operator, a, b;
     //set a to starting number
     a = equation[0];
-    //go through array using a double iteration;
+    //go through array using a double iteration to skip over operators ;
     for(var i = 0; i < equation.length - 1; i+= 2){
-        //the operand must come every other number
-        operand = equation[i + 1];
-        //set b to second number
+        //the operator must come after the first number
+        operator = equation[i + 1];
+        //set b to 3rd array index (should be a number)
         b = equation[i + 2];
-        //set a to the value of calculation between a operand b
-        a = checkOperand(operand, a, b);
-    //    keep repeating using a to hold the calculations in the order or the array
+        //set a to the value of the calculation between (a operator b)
+        a = checkOperator(operator, a, b);
+    //    keep repeating using a to hold the total calculations in the order or the array
     }
     // return result as a string;
     output = a.toString();
@@ -227,11 +228,11 @@ function process(equation){
 }
 //
 //function process(equation){
-//    checkOperand(equation[0],equation[1],equation[2]);
+//    checkOperator(equation[0],equation[1],equation[2]);
 //}
-
-function checkOperand(operand, a, b){
-    switch (operand) {
+//checks Operator and applies  and returns correct operation
+function checkOperator(operator, a, b){
+    switch (operator) {
         case '+':
             return addIt(a,b);
             break;
