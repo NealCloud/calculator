@@ -65,11 +65,14 @@ nCalc = {
     },
 
     addItem: function(val){
-        //check for errors
-        if(this.curNum == "Error" || this.curNum == "Ready"){
+        //check for errors or ready state!
+        if(this.curNum == "Error"){
             console.log("Error Reset");
             this.allClear();
             return;
+        }
+        else if(this.curNum == "Ready"){
+            this.allClear();
         }
 
         //check which buttons are pressed and add them to equation array and send to process function when equals is hit
@@ -117,7 +120,8 @@ nCalc = {
                     this.lastCalc[0] = this.curNum;
                     this.resetEquation();
                 }
-                else{
+                else if(this.curNum){}
+                else {
                     this.curNum = "Ready";
                 }
 
@@ -141,7 +145,7 @@ nCalc = {
                     this.equaIndex++;
                 }
                 else{
-                    //if operands is locked change the last operand in the equation array with new one
+                    //if operators are locked out change the last operator in the equation array with new one
                     this.equation[this.equaIndex - 1] = val;
                     //update selection
                     this.display(this.equation.join(" ") + this.curNum);
@@ -149,7 +153,7 @@ nCalc = {
                 break;
             case "- / +":
                 //toggle a plus or minus sign to current Number
-                //check if its negative and numbers allowed then add a minus to current number
+                //check if its negative and numbers unlocked then add a minus to current number
                 if(this.numbersOn && !this.negative) {
                     this.curNum = "-" + this.curNum;
                     this.negative = true;
