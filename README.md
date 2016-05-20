@@ -2,7 +2,6 @@
 
 - [Live Demo](http://nealcloud.github.io/calculator/) 
 
-<<<<<<< HEAD
 ### Features
   - add subtract division multiply
   - clear current inputs
@@ -52,7 +51,6 @@
 ### Tech
 * [jQuery]
 
-<<<<<<< HEAD
 ### Todos
  - [ ] make unit testing
  - [ ] add OOP
