@@ -1,39 +1,67 @@
-# Version 0.5
+# Calculator
 
-## Description
-Version 1 takes the layout and basic button click functionality built in the 2 previous versions and then ties in the calculation functionality. This version works toward more OOP understandings
-by taking the inputs from the calculator and inserting them into objects and then those objects into an array.
+A basic calculator
+> it can make consecutive calculations
 
-## Getting Started
-> - What branch do you have your latest changes on?
-    - **I don't know** - talk with an instructor
-    - **not master**
-        - Create pull request form current branch to master
-        - Merge pull request on master
-        - Go to Pull Latest Changes
-    - **master** - Go to Pull Latest Changes
-> - Pull Latest Changes
-        - `git checkout master`
-        - `git pull origin master`
-> - Create the new feature branch
-    - `git checkout -b v1`
-> - Work on the scope defined <a href="https://github.com/Learning-Fuze/calculator/tree/v1#scope">Below</a>
-> - Add files to git
-    - `git add .`
-> - Commit files (Group files together)
-    - `git commit -m "calculator v1 - Your Name"`
-    - **Replace "Your Name" with your first and last name**
-> - Send to gitHub (Push)
-    - `git push origin v1`
-> - Create pull request
-    - Pull request should be made from v1 to **your repository's/teams** master branch
+- [Live Demo](http://nealcloud.github.io/calculator/) 
 
+### Features
+  - add subtract division multiply
+  - clear current inputs
+  - clear all inputs
+  
+### Lessons Learned
+ - being able to check and respond to different calculation inputs
+ 
+##### start of script to check which button was pressed
+##### parameters: val  input value when a button is pressed
+##### an equals finalizes the the equation and sends it to be processed
+```javascript
+ switch(val){
+            case "=":
+                //get length of equation array
+                var len = this.equation.length;
+                //check if equation array uses an operator at the end  ex ["2", "+", "1", "+"]
+                if(len > 1 && !this.curNum) {
+                    //check if equation length is only 2 ex ["2", "+"]
+                    //push the first equation number to the back ["2", "+", "2"] and process the equation
+                    if(len == 2){
+                        this.equation.push(this.equation[0]);
+                        this.curNum = process(this.equation);
+                        this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    }
+                    //else equation must be similar to ["2", "+", "1", "+"]
+                     else{
+                        // process the equation without the last operator and store it ["2", "+", "1"]    pop ["+"]
+                        this.storeOp = this.equation.pop();
+                        this.curNum = process(this.equation);
+                        // create a new equation with result of previous calculation  ["3" , "+", "3"]
+                        this.equation[0] = this.curNum;
+                        this.equation[2] = this.curNum;
+                        this.curNum = process(this.equation);
+                        // set lastCalc to ["6", "+" , "3"]
+                        this.lastCalc = [this.curNum, this.storeOp, this.equation[this.equation.length - 1]];
+                    }
+                    this.resetEquation();
+                }
+```
+### Live View
+![ScreenShot](https://nealcloud.github.io/assets/img/c5.png)
 
-## Scope
-> - JS Functionality
-    - Add values from the buttons clicked into plain object that has the following properties
-        - type - equal to one of these types "number","operator","equalSign"
-        - value - equal to the value of the button
-    - Add object into an global array variable
-    - Process calculation based on objects in array
-> - Calculator Logic Examples with outputted values found <a href="https://docs.google.com/spreadsheets/d/1HRpRqdyQrax5vgwrVatcOxSxly6GHXXfZuzc0lb9Tfg/pubhtml#">here</a>
+### Version
+1.0
+
+### Tech
+* [jQuery]
+
+### Todos
+ - [ ] make unit testing
+ - [ ] add OOP
+
+### Bugs
+ - none found
+ 
+License
+----
+MIT
+
