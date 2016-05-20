@@ -1,10 +1,8 @@
 # Calculator
 
-A basic calculator
-> it can make consecutive calculations
-
 - [Live Demo](http://nealcloud.github.io/calculator/) 
 
+<<<<<<< HEAD
 ### Features
   - add subtract division multiply
   - clear current inputs
@@ -54,6 +52,7 @@ A basic calculator
 ### Tech
 * [jQuery]
 
+<<<<<<< HEAD
 ### Todos
  - [ ] make unit testing
  - [ ] add OOP
