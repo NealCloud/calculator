@@ -1,29 +1,66 @@
 # Calculator
 
-## Version 1
-#### Description
-Version 1 takes the layout and basic button click functionality built in the 2 previous versions and then ties in the calculation functionality. This version works toward more OOP understandings
-by taking the inputs from the calculator and inserting them into objects and then those objects into an array.
+- [Live Demo](http://nealcloud.github.io/calculator/) 
 
+<<<<<<< HEAD
+### Features
+  - add subtract division multiply
+  - clear current inputs
+  - clear all inputs
+  
+### Lessons Learned
+ - being able to check and respond to different calculation inputs
+ 
+##### start of script to check which button was pressed
+##### parameters: val  input value when a button is pressed
+##### an equals finalizes the the equation and sends it to be processed
+```javascript
+ switch(val){
+            case "=":
+                //get length of equation array
+                var len = this.equation.length;
+                //check if equation array uses an operator at the end  ex ["2", "+", "1", "+"]
+                if(len > 1 && !this.curNum) {
+                    //check if equation length is only 2 ex ["2", "+"]
+                    //push the first equation number to the back ["2", "+", "2"] and process the equation
+                    if(len == 2){
+                        this.equation.push(this.equation[0]);
+                        this.curNum = process(this.equation);
+                        this.lastCalc = [this.curNum, this.equation[this.equation.length - 2],this.equation[this.equation.length - 1]];
+                    }
+                    //else equation must be similar to ["2", "+", "1", "+"]
+                     else{
+                        // process the equation without the last operator and store it ["2", "+", "1"]    pop ["+"]
+                        this.storeOp = this.equation.pop();
+                        this.curNum = process(this.equation);
+                        // create a new equation with result of previous calculation  ["3" , "+", "3"]
+                        this.equation[0] = this.curNum;
+                        this.equation[2] = this.curNum;
+                        this.curNum = process(this.equation);
+                        // set lastCalc to ["6", "+" , "3"]
+                        this.lastCalc = [this.curNum, this.storeOp, this.equation[this.equation.length - 1]];
+                    }
+                    this.resetEquation();
+                }
+```
+### Live View
+![ScreenShot](https://nealcloud.github.io/assets/img/c5.png)
 
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v1#getting-started">Getting Started</a>
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v1#scope">View Scope</a>
+### Version
+1.0
 
-## Version 0.5
-#### Description
-Version 0.5 adds in user functionality without needing to write the underneath logic of a calculator. With the introduction
-to the calculator object the user can interact with the object to receive the values after calculation has been completed.
+### Tech
+* [jQuery]
 
+<<<<<<< HEAD
+### Todos
+ - [ ] make unit testing
+ - [ ] add OOP
 
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.5#getting-started">Getting Started</a>
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.5#scope">View Scope</a>
+### Bugs
+ - none found
+ 
+License
+----
+MIT
 
-## Version 0.1
-#### Description
-Version 0.1 is the starting point of the Calculator Project. You must create the base structure and styles, using bootstrap as you deem necessary. For this version we are looking to see that you
-understand how to create the basic structure of a web application, style it, and make it reasonably responsive.  No functionality will be encoded with this version.
-
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.1#getting-started">Getting Started</a>
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.1#scope">View Scope</a>
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.1#design">View Design</a>
-- <a href="https://github.com/Learning-Fuze/calculator/tree/v0.1#assignments---aka-criteria-for-success-on-this-version-of-the-project">View Assignments</a>
