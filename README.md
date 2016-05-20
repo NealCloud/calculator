@@ -6,6 +6,7 @@
   - add subtract division multiply
   - clear current inputs
   - clear all inputs
+  - unit testing for various inputs
   
 ### Lessons Learned
  - being able to check and respond to different calculation inputs
@@ -46,13 +47,13 @@
 ![ScreenShot](https://nealcloud.github.io/assets/img/c5.png)
 
 ### Version
-1.0
+1.1
 
 ### Tech
-* [jQuery]
+* [jQuery 2.2]
+* [Jasmine 2.4]
 
 ### Todos
- - [ ] make unit testing
  - [ ] add OOP
 
 ### Bugs

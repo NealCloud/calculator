@@ -5,12 +5,12 @@ function testLooper(arr){
         });    
     }
 
-describe('Basic Operatioins Suite', function(){
+describe('Basic Operations Suite', function(){
     beforeEach(function(){
         nCalc.allClear();
     });
         
-    it('addition 1 + 2', () => {
+    it('Addition 1 + 2', () => {
         let calc = ['1','+','2', '='];
         testLooper(calc);       
         expect(nCalc.curNum).toBe('3');
@@ -41,13 +41,13 @@ describe('Comprehensive Operations', function(){
         nCalc.allClear();
     });
      
-    it('successive operations', function(){
+    it('Successive operations', function(){
         var calc = ['1','+','1','+','2', '='];
         testLooper(calc);        
         expect(nCalc.curNum).toBe('4');
     });
     
-    it('decimals', function(){
+    it('Decimals', function(){
          var calc = ['1','.','1','+','1','.','1','='];
         testLooper(calc);        
         expect(nCalc.curNum).toBe('2.2');
@@ -71,13 +71,13 @@ describe('Comprehensive Operations', function(){
         expect(nCalc.curNum).toBe('2');
     });
     
-    it(' operation repeat', function(){
+    it('operation repeat', function(){
          var calc = ['1','+','1','=','=','='];
         testLooper(calc);        
         expect(nCalc.curNum).toBe('4');
     });
     
-    it(' operation rollover', function(){
+    it('operation rollover', function(){
          var calc = ['1','+','1','+','=','+','='];
         testLooper(calc);        
         expect(nCalc.curNum).toBe('8');
